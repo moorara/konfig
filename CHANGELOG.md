@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.4.1](https://github.com/moorara/konfig/tree/v0.4.1) (2020-02-26)
+
+[Full Changelog](https://github.com/moorara/konfig/compare/v0.4.0...v0.4.1)
+
+**Fixed bugs:**
+
+- Watch does not work with Kubernetes [\#47](https://github.com/moorara/konfig/issues/47)
+
+**Merged pull requests:**
+
+- Fix watch bug for Kubernetes [\#48](https://github.com/moorara/konfig/pull/48) ([moorara](https://github.com/moorara))
+- Update module stretchr/testify to v1.5.1 [\#46](https://github.com/moorara/konfig/pull/46) ([renovate[bot]](https://github.com/apps/renovate))
+- Update examples to use konfig v0.4.0 [\#43](https://github.com/moorara/konfig/pull/43) ([moorara](https://github.com/moorara))
+
 ## [v0.4.0](https://github.com/moorara/konfig/tree/v0.4.0) (2020-02-07)
 
 [Full Changelog](https://github.com/moorara/konfig/compare/v0.3.3...v0.4.0)
@@ -32,6 +46,7 @@
 
 **Merged pull requests:**
 
+- Update module stretchr/testify to v1.5.0 [\#45](https://github.com/moorara/konfig/pull/45) ([renovate[bot]](https://github.com/apps/renovate))
 - Update GitHub Workflow [\#41](https://github.com/moorara/konfig/pull/41) ([moorara](https://github.com/moorara))
 - Add data type to help description for flags [\#40](https://github.com/moorara/konfig/pull/40) ([moorara](https://github.com/moorara))
 - Update examples and add demos [\#39](https://github.com/moorara/konfig/pull/39) ([moorara](https://github.com/moorara))
@@ -98,7 +113,6 @@
 
 - Clarify flag package and -help option [\#6](https://github.com/moorara/konfig/pull/6) ([moorara](https://github.com/moorara))
 - BREAKING: change file tag to fileenv tag [\#5](https://github.com/moorara/konfig/pull/5) ([moorara](https://github.com/moorara))
-- Improve PickAndLog logs [\#4](https://github.com/moorara/konfig/pull/4) ([moorara](https://github.com/moorara))
 
 ## [v0.1.0](https://github.com/moorara/konfig/tree/v0.1.0) (2019-07-10)
 
@@ -106,6 +120,7 @@
 
 **Merged pull requests:**
 
+- Improve PickAndLog logs [\#4](https://github.com/moorara/konfig/pull/4) ([moorara](https://github.com/moorara))
 - Add GitHub files [\#3](https://github.com/moorara/konfig/pull/3) ([moorara](https://github.com/moorara))
 - Configure Renovate [\#2](https://github.com/moorara/konfig/pull/2) ([renovate[bot]](https://github.com/apps/renovate))
 - Bootstrap 🚀 [\#1](https://github.com/moorara/konfig/pull/1) ([moorara](https://github.com/moorara))
