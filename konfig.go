@@ -299,6 +299,7 @@ func (c *controller) getFieldValue(fieldName, flagName, envName, fileEnvName str
 			}
 
 			// Read config file
+			filePath = filepath.Clean(filePath)
 			if b, err := ioutil.ReadFile(filePath); err == nil {
 				value = string(b)
 				c.log(5, "[%s] value read from %s: %s", fieldName, filePath, value)
@@ -1077,14 +1078,42 @@ func Watch(config sync.Locker, subscribers []chan Update, opts ...Option) (func(
 					break
 				}
 
-				if event.Op&fsnotify.Write > 0 {
-					if f, ok := c.filesToFields[event.Name]; ok {
-						if b, err := ioutil.ReadFile(event.Name); err == nil {
+				path := filepath.Clean(event.Name)
+				c.log(6, "event received: %s %s", event.Op, event.Name)
+
+				// We only receive events for added files, this if check is redundant!
+				if f, ok := c.filesToFields[path]; ok {
+					// Write
+					if event.Op&fsnotify.Write == fsnotify.Write {
+						if b, err := ioutil.ReadFile(path); err == nil {
 							val := string(b)
-							c.log(3, "received an update from %s: %s", event.Name, val)
+							c.log(3, "received an update from %s: %s", path, val)
 							config.Lock()
 							c.setField(f, val)
 							config.Unlock()
+						}
+					}
+
+					// Remove
+					// Kubernetes injects new values from ConfigMaps and Secrets by removing the mounted files and recreating them.
+					// When a watched file is removed, the fsnotify package will remove it from the watcher too.
+					// This if block is a workaround for the aforementioned Kubernetes situation.
+					// See https://github.com/moorara/konfig/issues/47
+					if event.Op&fsnotify.Remove == fsnotify.Remove {
+						// Check if the removed file is already recreated
+						if _, err := os.Stat(path); err == nil {
+							if b, err := ioutil.ReadFile(path); err == nil {
+								val := string(b)
+								c.log(3, "received an update from %s: %s", path, val)
+								config.Lock()
+								c.setField(f, val)
+								config.Unlock()
+							}
+
+							// Re-Add a watch for the file
+							if err := watcher.Add(path); err != nil {
+								c.log(1, "cannot watch file %s: %s", f, err)
+							}
 						}
 					}
 				}
@@ -1097,9 +1126,9 @@ func Watch(config sync.Locker, subscribers []chan Update, opts ...Option) (func(
 		}
 	}()
 
-	for f := range c.filesToFields {
-		if err := watcher.Add(f); err != nil {
-			c.log(1, "cannot watch file %s: %s", f, err)
+	for path := range c.filesToFields {
+		if err := watcher.Add(path); err != nil {
+			c.log(1, "cannot watch file %s: %s", path, err)
 			return nil, err
 		}
 	}

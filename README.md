@@ -185,6 +185,7 @@ In both cases you need to specify a verbosity level for logs.
 | `3`   | Logging information related to new values read from files. |
 | `4`   | Logging information related to notifying subscribers.      |
 | `5`   | Logging information related to setting values of fields.   |
+| `6`   | Logging miscellaneous information.                         |
 
 ### Watching Changes
 
