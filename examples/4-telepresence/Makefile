@@ -4,7 +4,7 @@ build:
 	go build -o app
 
 swap:
-	elepresence --swap-deployment example --run ./app
+	telepresence --swap-deployment example --run ./app
 
 docker:
 	docker image build --tag $(docker_image):latest .
