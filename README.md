@@ -198,7 +198,7 @@ You can find an example of using `Watch()` method [here](./examples/3-watch).
 for **dynamic configuration management** and **secret injection** for Go applications running in Kubernetes.
 
 
-[godoc-url]: https://godoc.org/github.com/moorara/konfig
+[godoc-url]: https://pkg.go.dev/github.com/moorara/konfig
 [godoc-image]: https://godoc.org/github.com/moorara/konfig?status.svg
 [workflow-url]: https://github.com/moorara/konfig/actions
 [workflow-image]: https://github.com/moorara/konfig/workflows/Main/badge.svg
