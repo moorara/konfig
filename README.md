@@ -29,7 +29,7 @@ import (
   "github.com/moorara/konfig"
 )
 
-var Config = struct {
+var config = struct {
   Enabled   bool
   LogLevel  string
   Timeout   time.Duration
@@ -41,8 +41,8 @@ var Config = struct {
 }
 
 func main() {
-  konfig.Pick(&Config)
-  fmt.Printf("%+v\n", Config)
+  konfig.Pick(&config)
+  fmt.Printf("%+v\n", config)
 }
 ```
 
@@ -136,7 +136,7 @@ import (
   "github.com/moorara/konfig"
 )
 
-var Config = struct {
+var config = struct {
   Enabled   bool
   LogLevel  string
 } {
@@ -145,7 +145,7 @@ var Config = struct {
 }
 
 func main() {
-  konfig.Pick(&Config)
+  konfig.Pick(&config)
   flag.Parse()
 }
 ```

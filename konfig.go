@@ -1019,7 +1019,8 @@ func (c *controller) readFields(vStruct reflect.Value) {
 }
 
 // Pick reads values for exported fields of a struct from either command-line flags, environment variables, or configuration files.
-// You can also specify default values.
+// Default values can also be specified.
+// You should pass the pointer to a struct for config; otherwise you will get an error.
 func Pick(config interface{}, opts ...Option) error {
 	c := controllerFromEnv()
 	for _, opt := range opts {
