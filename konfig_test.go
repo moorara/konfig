@@ -2610,7 +2610,6 @@ func TestIterateOnFields(t *testing.T) {
 		expectedEnvNames     []string
 		expectedFileEnvNames []string
 		expectedListSeps     []string
-		expectedError        error
 	}{
 		{
 			name: "Default",
@@ -2694,7 +2693,6 @@ func TestIterateOnFields(t *testing.T) {
 				",", ",", ",", ",", ",",
 				",", ",",
 			},
-			expectedError: nil,
 		},
 		{
 			name: "WithPrefixOptions",
@@ -2781,7 +2779,6 @@ func TestIterateOnFields(t *testing.T) {
 				",", ",", ",", ",", ",",
 				",", ",",
 			},
-			expectedError: nil,
 		},
 		{
 			name: "WithListSepOption",
@@ -2865,7 +2862,6 @@ func TestIterateOnFields(t *testing.T) {
 				"|", "|", "|", "|", "|",
 				"|", "|",
 			},
-			expectedError: nil,
 		},
 	}
 
@@ -2896,7 +2892,6 @@ func TestIterateOnFields(t *testing.T) {
 			assert.Equal(t, tc.expectedEnvNames, envNames)
 			assert.Equal(t, tc.expectedFileEnvNames, fileEnvNames)
 			assert.Equal(t, tc.expectedListSeps, listSeps)
-			assert.Equal(t, tc.expectedError, err)
 		})
 	}
 }
