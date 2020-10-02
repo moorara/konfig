@@ -131,30 +131,32 @@ func TestGetFlagValue(t *testing.T) {
 	}{
 		{[]string{"exe", "invalid"}, "invalid", ""},
 
-		{[]string{"exe", "-enabled"}, "enabled", "true"},
-		{[]string{"exe", "--enabled"}, "enabled", "true"},
-		{[]string{"exe", "-enabled=false"}, "enabled", "false"},
-		{[]string{"exe", "--enabled=false"}, "enabled", "false"},
-		{[]string{"exe", "-enabled", "false"}, "enabled", "false"},
-		{[]string{"exe", "--enabled", "false"}, "enabled", "false"},
+		{[]string{"app", "-enabled"}, "enabled", "true"},
+		{[]string{"app", "--enabled"}, "enabled", "true"},
+		{[]string{"app", "-enabled=false"}, "enabled", "false"},
+		{[]string{"app", "--enabled=false"}, "enabled", "false"},
+		{[]string{"app", "-enabled", "false"}, "enabled", "false"},
+		{[]string{"app", "--enabled", "false"}, "enabled", "false"},
 
-		{[]string{"exe", "-port=-10"}, "port", "-10"},
-		{[]string{"exe", "--port=-10"}, "port", "-10"},
-		{[]string{"exe", "-port", "-10"}, "port", "-10"},
-		{[]string{"exe", "--port", "-10"}, "port", "-10"},
+		{[]string{"app", "-number=-10"}, "number", "-10"},
+		{[]string{"app", "--number=-10"}, "number", "-10"},
+		{[]string{"app", "-number", "-10"}, "number", "-10"},
+		{[]string{"app", "--number", "-10"}, "number", "-10"},
 
-		{[]string{"exe", "-text=content"}, "text", "content"},
-		{[]string{"exe", "--text=content"}, "text", "content"},
-		{[]string{"exe", "-text", "content"}, "text", "content"},
-		{[]string{"exe", "--text", "content"}, "text", "content"},
+		{[]string{"app", "-text=content"}, "text", "content"},
+		{[]string{"app", "--text=content"}, "text", "content"},
+		{[]string{"app", "-text", "content"}, "text", "content"},
+		{[]string{"app", "--text", "content"}, "text", "content"},
 
-		{[]string{"exe", "-enabled", "-text", "content"}, "enabled", "true"},
-		{[]string{"exe", "--enabled", "--text", "content"}, "enabled", "true"},
+		{[]string{"app", "-enabled", "-text=content"}, "enabled", "true"},
+		{[]string{"app", "--enabled", "--text=content"}, "enabled", "true"},
+		{[]string{"app", "-enabled", "-text", "content"}, "enabled", "true"},
+		{[]string{"app", "--enabled", "--text", "content"}, "enabled", "true"},
 
-		{[]string{"exec", "-service.name=go-service"}, "service.name", "go-service"},
-		{[]string{"exec", "--service.name=go-service"}, "service.name", "go-service"},
-		{[]string{"exec", "-service.name", "go-service"}, "service.name", "go-service"},
-		{[]string{"exec", "--service.name", "go-service"}, "service.name", "go-service"},
+		{[]string{"app", "-name-list=alice,bob"}, "name-list", "alice,bob"},
+		{[]string{"app", "--name-list=alice,bob"}, "name-list", "alice,bob"},
+		{[]string{"app", "-name-list", "alice,bob"}, "name-list", "alice,bob"},
+		{[]string{"app", "--name-list", "alice,bob"}, "name-list", "alice,bob"},
 	}
 
 	origArgs := os.Args
@@ -173,7 +175,7 @@ func TestGetFlagValue(t *testing.T) {
 func TestValidateStruct(t *testing.T) {
 	tests := []struct {
 		name          string
-		config        interface{}
+		s             interface{}
 		expectedError error
 	}{
 		{
@@ -195,13 +197,14 @@ func TestValidateStruct(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			v, err := validateStruct(tc.config)
+			v, err := validateStruct(tc.s)
 
 			if tc.expectedError == nil {
+				assert.NotNil(t, v)
 				assert.NoError(t, err)
 			} else {
+				assert.Empty(t, v)
 				assert.Equal(t, tc.expectedError, err)
-				assert.Equal(t, reflect.Value{}, v)
 			}
 		})
 	}
@@ -253,10 +256,9 @@ func TestIsTypeSupported(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			typ := reflect.TypeOf(tc.field)
-			res := isTypeSupported(typ)
+			tp := reflect.TypeOf(tc.field)
 
-			assert.Equal(t, tc.expected, res)
+			assert.Equal(t, tc.expected, isTypeSupported(tp))
 		})
 	}
 }
