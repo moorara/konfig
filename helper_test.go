@@ -256,9 +256,9 @@ func TestIsTypeSupported(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			tp := reflect.TypeOf(tc.field)
+			typ := reflect.TypeOf(tc.field)
 
-			assert.Equal(t, tc.expected, isTypeSupported(tp))
+			assert.Equal(t, tc.expected, isTypeSupported(typ))
 		})
 	}
 }
