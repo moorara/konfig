@@ -2339,7 +2339,7 @@ func TestSetURLSlice(t *testing.T) {
 	}
 }
 
-func TestSetField(t *testing.T) {
+func TestSetFieldValue(t *testing.T) {
 	d90m := 90 * time.Minute
 	d120m := 120 * time.Minute
 	d4h := 4 * time.Hour
@@ -2584,12 +2584,12 @@ func TestSetField(t *testing.T) {
 				// Only consider exported and supported fields that their names start with "Field"
 				if v.CanSet() && isTypeSupported(v.Type()) && strings.HasPrefix(f.Name, "Field") {
 					f := fieldInfo{
-						v:       v,
+						value:   v,
 						name:    f.Name,
 						listSep: ",",
 					}
 
-					res := tc.c.setField(f, tc.values[f.name])
+					res := tc.c.setFieldValue(f, tc.values[f.name])
 					assert.Equal(t, tc.expectedResult, res)
 				}
 			}

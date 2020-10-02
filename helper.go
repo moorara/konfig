@@ -9,13 +9,14 @@ import (
 	"unicode"
 )
 
+// flagValue implements the flag.Value interface.
 type flagValue struct{}
 
-func (v *flagValue) String() string {
+func (v flagValue) String() string {
 	return ""
 }
 
-func (v *flagValue) Set(string) error {
+func (v flagValue) Set(string) error {
 	return nil
 }
 

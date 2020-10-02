@@ -48,7 +48,7 @@ type Update struct {
 
 // fieldInfo has all the information for setting a struct field later.
 type fieldInfo struct {
-	v       reflect.Value
+	value   reflect.Value
 	name    string
 	listSep string
 }
@@ -828,74 +828,74 @@ func (c *controller) setURLSlice(v reflect.Value, name string, vals []string) bo
 	return false
 }
 
-func (c *controller) setField(f fieldInfo, val string) bool {
-	switch f.v.Kind() {
+func (c *controller) setFieldValue(f fieldInfo, val string) bool {
+	switch f.value.Kind() {
 	case reflect.String:
-		return c.setString(f.v, f.name, val)
+		return c.setString(f.value, f.name, val)
 	case reflect.Bool:
-		return c.setBool(f.v, f.name, val)
+		return c.setBool(f.value, f.name, val)
 	case reflect.Float32:
-		return c.setFloat32(f.v, f.name, val)
+		return c.setFloat32(f.value, f.name, val)
 	case reflect.Float64:
-		return c.setFloat64(f.v, f.name, val)
+		return c.setFloat64(f.value, f.name, val)
 	case reflect.Int:
-		return c.setInt(f.v, f.name, val)
+		return c.setInt(f.value, f.name, val)
 	case reflect.Int8:
-		return c.setInt8(f.v, f.name, val)
+		return c.setInt8(f.value, f.name, val)
 	case reflect.Int16:
-		return c.setInt16(f.v, f.name, val)
+		return c.setInt16(f.value, f.name, val)
 	case reflect.Int32:
-		return c.setInt32(f.v, f.name, val)
+		return c.setInt32(f.value, f.name, val)
 	case reflect.Int64:
-		return c.setInt64(f.v, f.name, val)
+		return c.setInt64(f.value, f.name, val)
 	case reflect.Uint:
-		return c.setUint(f.v, f.name, val)
+		return c.setUint(f.value, f.name, val)
 	case reflect.Uint8:
-		return c.setUint8(f.v, f.name, val)
+		return c.setUint8(f.value, f.name, val)
 	case reflect.Uint16:
-		return c.setUint16(f.v, f.name, val)
+		return c.setUint16(f.value, f.name, val)
 	case reflect.Uint32:
-		return c.setUint32(f.v, f.name, val)
+		return c.setUint32(f.value, f.name, val)
 	case reflect.Uint64:
-		return c.setUint64(f.v, f.name, val)
+		return c.setUint64(f.value, f.name, val)
 	case reflect.Struct:
-		return c.setStruct(f.v, f.name, val)
+		return c.setStruct(f.value, f.name, val)
 
 	case reflect.Slice:
-		tSlice := reflect.TypeOf(f.v.Interface()).Elem()
+		tSlice := reflect.TypeOf(f.value.Interface()).Elem()
 		vals := strings.Split(val, f.listSep)
 
 		switch tSlice.Kind() {
 		case reflect.String:
-			return c.setStringSlice(f.v, f.name, vals)
+			return c.setStringSlice(f.value, f.name, vals)
 		case reflect.Bool:
-			return c.setBoolSlice(f.v, f.name, vals)
+			return c.setBoolSlice(f.value, f.name, vals)
 		case reflect.Float32:
-			return c.setFloat32Slice(f.v, f.name, vals)
+			return c.setFloat32Slice(f.value, f.name, vals)
 		case reflect.Float64:
-			return c.setFloat64Slice(f.v, f.name, vals)
+			return c.setFloat64Slice(f.value, f.name, vals)
 		case reflect.Int:
-			return c.setIntSlice(f.v, f.name, vals)
+			return c.setIntSlice(f.value, f.name, vals)
 		case reflect.Int8:
-			return c.setInt8Slice(f.v, f.name, vals)
+			return c.setInt8Slice(f.value, f.name, vals)
 		case reflect.Int16:
-			return c.setInt16Slice(f.v, f.name, vals)
+			return c.setInt16Slice(f.value, f.name, vals)
 		case reflect.Int32:
-			return c.setInt32Slice(f.v, f.name, vals)
+			return c.setInt32Slice(f.value, f.name, vals)
 		case reflect.Int64:
-			return c.setInt64Slice(f.v, f.name, vals)
+			return c.setInt64Slice(f.value, f.name, vals)
 		case reflect.Uint:
-			return c.setUintSlice(f.v, f.name, vals)
+			return c.setUintSlice(f.value, f.name, vals)
 		case reflect.Uint8:
-			return c.setUint8Slice(f.v, f.name, vals)
+			return c.setUint8Slice(f.value, f.name, vals)
 		case reflect.Uint16:
-			return c.setUint16Slice(f.v, f.name, vals)
+			return c.setUint16Slice(f.value, f.name, vals)
 		case reflect.Uint32:
-			return c.setUint32Slice(f.v, f.name, vals)
+			return c.setUint32Slice(f.value, f.name, vals)
 		case reflect.Uint64:
-			return c.setUint64Slice(f.v, f.name, vals)
+			return c.setUint64Slice(f.value, f.name, vals)
 		case reflect.Struct:
-			return c.setURLSlice(f.v, f.name, vals)
+			return c.setURLSlice(f.value, f.name, vals)
 		}
 	}
 
@@ -1004,7 +1004,7 @@ func (c *controller) readFields(vStruct reflect.Value) {
 		}
 
 		f := fieldInfo{
-			v:       v,
+			value:   v,
 			name:    fieldName,
 			listSep: listSep,
 		}
@@ -1014,7 +1014,7 @@ func (c *controller) readFields(vStruct reflect.Value) {
 			c.filesToFields[path] = f
 		}
 
-		c.setField(f, val)
+		c.setFieldValue(f, val)
 	})
 }
 
@@ -1090,7 +1090,7 @@ func Watch(config sync.Locker, subscribers []chan Update, opts ...Option) (func(
 							val := string(b)
 							c.log(3, "received an update from %s: %s", path, val)
 							config.Lock()
-							c.setField(f, val)
+							c.setFieldValue(f, val)
 							config.Unlock()
 						}
 					}
@@ -1107,7 +1107,7 @@ func Watch(config sync.Locker, subscribers []chan Update, opts ...Option) (func(
 								val := string(b)
 								c.log(3, "received an update from %s: %s", path, val)
 								config.Lock()
-								c.setField(f, val)
+								c.setFieldValue(f, val)
 								config.Unlock()
 							}
 
