@@ -905,11 +905,12 @@ func (c *controller) setFieldValue(f fieldInfo, val string) bool {
 func (c *controller) iterateOnFields(vStruct reflect.Value, handle func(v reflect.Value, fieldName, flagName, envName, fileEnvName, listSep string)) {
 	// Iterate over struct fields
 	for i := 0; i < vStruct.NumField(); i++ {
-		v := vStruct.Field(i)        // reflect.Value --> vField.Kind(), vField.Type().Name(), vField.Type().Kind(), vField.Interface()
-		f := vStruct.Type().Field(i) // reflect.StructField --> tField.Name, tField.Type.Name(), tField.Type.Kind(), tField.Tag.Get(tag)
+		v := vStruct.Field(i)        // reflect.Value       --> vField.Kind(), vField.Type().Name(), vField.Type().Kind(), vField.Interface()
+		t := v.Type()                // reflect.Type        --> t.Kind(), t.PkgPath(), t.Name(), t.NumField()
+		f := vStruct.Type().Field(i) // reflect.StructField --> f.Name, f.Type.Name(), f.Type.Kind(), f.Tag.Get(tag)
 
 		// Skip unexported and unsupported fields
-		if !v.CanSet() || !isTypeSupported(v.Type()) {
+		if !v.CanSet() || !isTypeSupported(t) {
 			continue
 		}
 
