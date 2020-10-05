@@ -52,6 +52,19 @@ You can find examples of using `konfig` alongside some demos [here](./examples).
 
 ## Documentation
 
+Supported types:
+
+  - `bool`, `[]bool`
+  - `string`, `[]string`
+  - `float32`, `float64`
+  - `[]float32`, `[]float64`
+  - `int`, `int8`, `int16`, `int32`, `int64`
+  - `[]int`, `[]int8`, `[]int16`, `[]int32`, `[]int64`
+  - `uint`, `uint8`, `uint16`, `uint32`, `uint64`
+  - `[]uint`, `[]uint8`, `[]uint16`, `[]uint32`, `[]uint64`
+  - `time.Duration`, `[]time.Duration`
+  - `url.URL`, `[]url.URL`
+
 The precedence of sources for reading values is as follows:
 
   1. command-line flags
