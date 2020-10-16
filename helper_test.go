@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"regexp"
 	"testing"
 	"time"
 
@@ -211,8 +212,11 @@ func TestValidateStruct(t *testing.T) {
 }
 
 func TestIsTypeSupported(t *testing.T) {
-	service1URL, _ := url.Parse("service-1:8080")
-	service2URL, _ := url.Parse("service-2:8080")
+	url1, _ := url.Parse("service-1:8080")
+	url2, _ := url.Parse("service-2:8080")
+
+	re1 := regexp.MustCompilePOSIX("[:digit:]")
+	re2 := regexp.MustCompilePOSIX("[:alpha:]")
 
 	tests := []struct {
 		name     string
@@ -234,7 +238,8 @@ func TestIsTypeSupported(t *testing.T) {
 		{"Uint16", uint16(65535), true},
 		{"Uint32", uint32(4294967295), true},
 		{"Uint64", uint64(18446744073709551615), true},
-		{"URL", *service1URL, true},
+		{"URL", *url1, true},
+		{"Regexp", *re1, true},
 		{"StringSlice", []string{"foo", "bar"}, true},
 		{"BoolSlice", []bool{true, false}, true},
 		{"Float32Slice", []float32{3.1415, 2.7182}, true},
@@ -250,7 +255,8 @@ func TestIsTypeSupported(t *testing.T) {
 		{"Uint16Slice", []uint16{}, true},
 		{"Uint32Slice", []uint32{}, true},
 		{"Uint64Slice", []uint64{}, true},
-		{"URLSlice", []url.URL{*service1URL, *service2URL}, true},
+		{"URLSlice", []url.URL{*url1, *url2}, true},
+		{"RegexpSlice", []regexp.Regexp{*re1, *re2}, true},
 		{"Unsupported", time.Now(), false},
 	}
 

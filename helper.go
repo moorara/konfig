@@ -156,9 +156,8 @@ func isTypeSupported(t reflect.Type) bool {
 	case reflect.Slice:
 		return isTypeSupported(t.Elem())
 	case reflect.Struct:
-		if t.PkgPath() == "net/url" && t.Name() == "URL" {
-			return true
-		}
+		return (t.PkgPath() == "net/url" && t.Name() == "URL") ||
+			(t.PkgPath() == "regexp" && t.Name() == "Regexp")
 	}
 
 	return false

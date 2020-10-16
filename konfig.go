@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -525,14 +526,25 @@ func (c *controller) setUint64(v reflect.Value, name, val string) bool {
 }
 
 func (c *controller) setStruct(v reflect.Value, name, val string) bool {
-	if t := v.Type(); t.PkgPath() == "net/url" && t.Name() == "URL" {
-		// url.URL
+	t := v.Type()
+
+	if t.PkgPath() == "net/url" && t.Name() == "URL" {
 		if u, err := url.Parse(val); err == nil {
 			// u is a pointer
 			if !reflect.DeepEqual(v.Interface(), *u) {
 				c.log(5, "[%s] setting url value: %s", name, val)
 				v.Set(reflect.ValueOf(u).Elem())
 				c.notifySubscribers(name, *u)
+				return true
+			}
+		}
+	} else if t.PkgPath() == "regexp" && t.Name() == "Regexp" {
+		if r, err := regexp.CompilePOSIX(val); err == nil {
+			// r is a pointer
+			if !reflect.DeepEqual(v.Interface(), *r) {
+				c.log(5, "[%s] setting regexp value: %s", name, val)
+				v.Set(reflect.ValueOf(r).Elem())
+				c.notifySubscribers(name, *r)
 				return true
 			}
 		}
@@ -805,7 +817,7 @@ func (c *controller) setUint64Slice(v reflect.Value, name string, vals []string)
 	return false
 }
 
-func (c *controller) setURLSlice(v reflect.Value, name string, vals []string) bool {
+func (c *controller) setStructSlice(v reflect.Value, name string, vals []string) bool {
 	t := reflect.TypeOf(v.Interface()).Elem()
 
 	if t.PkgPath() == "net/url" && t.Name() == "URL" {
@@ -821,6 +833,21 @@ func (c *controller) setURLSlice(v reflect.Value, name string, vals []string) bo
 			c.log(5, "[%s] setting url slice: %v", name, urls)
 			v.Set(reflect.ValueOf(urls))
 			c.notifySubscribers(name, urls)
+			return true
+		}
+	} else if t.PkgPath() == "regexp" && t.Name() == "Regexp" {
+		regexps := []regexp.Regexp{}
+		for _, val := range vals {
+			if r, err := regexp.CompilePOSIX(val); err == nil {
+				regexps = append(regexps, *r)
+			}
+		}
+
+		// []regexp.Regexp
+		if !reflect.DeepEqual(v.Interface(), regexps) {
+			c.log(5, "[%s] setting regexp slice: %v", name, regexps)
+			v.Set(reflect.ValueOf(regexps))
+			c.notifySubscribers(name, regexps)
 			return true
 		}
 	}
@@ -895,7 +922,7 @@ func (c *controller) setFieldValue(f fieldInfo, val string) bool {
 		case reflect.Uint64:
 			return c.setUint64Slice(f.value, f.name, vals)
 		case reflect.Struct:
-			return c.setURLSlice(f.value, f.name, vals)
+			return c.setStructSlice(f.value, f.name, vals)
 		}
 	}
 

@@ -64,6 +64,7 @@ Supported types:
   - `[]uint`, `[]uint8`, `[]uint16`, `[]uint32`, `[]uint64`
   - `time.Duration`, `[]time.Duration`
   - `url.URL`, `[]url.URL`
+  - `regexp.Regexp`, `[]regexp.Regexp`
 
 The precedence of sources for reading values is as follows:
 
