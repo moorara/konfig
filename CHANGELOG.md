@@ -1,5 +1,20 @@
 # Changelog
 
+## [v0.4.3](https://github.com/moorara/konfig/tree/v0.4.3) (2020-10-16)
+
+[Full Changelog](https://github.com/moorara/konfig/compare/v0.4.2...v0.4.3)
+
+**Merged pull requests:**
+
+- Add support for Regexp type [\#69](https://github.com/moorara/konfig/pull/69) ([moorara](https://github.com/moorara))
+- Update README.md [\#68](https://github.com/moorara/konfig/pull/68) ([moorara](https://github.com/moorara))
+- Update konfig.go [\#67](https://github.com/moorara/konfig/pull/67) ([moorara](https://github.com/moorara))
+- More test refactoring [\#66](https://github.com/moorara/konfig/pull/66) ([moorara](https://github.com/moorara))
+- Update helper\_test.go [\#65](https://github.com/moorara/konfig/pull/65) ([moorara](https://github.com/moorara))
+- Refactroing [\#64](https://github.com/moorara/konfig/pull/64) ([moorara](https://github.com/moorara))
+- Refactoring codes [\#63](https://github.com/moorara/konfig/pull/63) ([moorara](https://github.com/moorara))
+- Update examples to use konfig v0.4.2 [\#62](https://github.com/moorara/konfig/pull/62) ([moorara](https://github.com/moorara))
+
 ## [v0.4.2](https://github.com/moorara/konfig/tree/v0.4.2) (2020-09-15)
 
 [Full Changelog](https://github.com/moorara/konfig/compare/v0.4.1...v0.4.2)
