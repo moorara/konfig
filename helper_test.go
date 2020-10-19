@@ -9,31 +9,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/moorara/konfig/ptr"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFlagValue(t *testing.T) {
-	tests := []struct {
-		fv               *flagValue
-		expectedString   string
-		setString        string
-		expectedSetError error
-	}{
-		{
-			fv:               &flagValue{},
-			expectedString:   "",
-			setString:        "anything",
-			expectedSetError: nil,
-		},
-	}
+	fv := new(flagValue)
 
-	for _, tc := range tests {
-		str := tc.fv.String()
-		assert.Equal(t, tc.expectedString, str)
-
-		err := tc.fv.Set(tc.setString)
-		assert.Equal(t, tc.expectedSetError, err)
-	}
+	assert.Empty(t, fv.String())
+	assert.NoError(t, fv.Set(""))
 }
 
 func TestTokenize(t *testing.T) {
@@ -186,12 +170,12 @@ func TestValidateStruct(t *testing.T) {
 		},
 		{
 			"NonPointer",
-			config{},
+			struct{}{},
 			errors.New("a non-pointer type is passed"),
 		},
 		{
 			"OK",
-			&config{},
+			new(struct{}),
 			nil,
 		},
 	}
@@ -212,52 +196,65 @@ func TestValidateStruct(t *testing.T) {
 }
 
 func TestIsTypeSupported(t *testing.T) {
-	url1, _ := url.Parse("service-1:8080")
-	url2, _ := url.Parse("service-2:8080")
-
-	re1 := regexp.MustCompilePOSIX("[:digit:]")
-	re2 := regexp.MustCompilePOSIX("[:alpha:]")
+	u, _ := url.Parse("service-1")
+	r := regexp.MustCompilePOSIX("[:digit:]")
 
 	tests := []struct {
 		name     string
 		field    interface{}
 		expected bool
 	}{
-		{"String", "dummy", true},
+		{"String", "content", true},
 		{"Bool", true, true},
 		{"Float32", float32(3.1415), true},
 		{"Float64", float64(3.14159265359), true},
-		{"Int", int(-2147483648), true},
+		{"Int", int(-9223372036854775808), true},
 		{"Int8", int8(-128), true},
 		{"Int16", int16(-32768), true},
 		{"Int32", int32(-2147483648), true},
 		{"Int64", int64(-9223372036854775808), true},
-		{"Duration", time.Hour, true},
-		{"Uint", uint(4294967295), true},
+		{"Uint", uint(18446744073709551615), true},
 		{"Uint8", uint8(255), true},
 		{"Uint16", uint16(65535), true},
 		{"Uint32", uint32(4294967295), true},
 		{"Uint64", uint64(18446744073709551615), true},
-		{"URL", *url1, true},
-		{"Regexp", *re1, true},
-		{"StringSlice", []string{"foo", "bar"}, true},
-		{"BoolSlice", []bool{true, false}, true},
-		{"Float32Slice", []float32{3.1415, 2.7182}, true},
-		{"Float64Slice", []float64{3.14159265359, 2.71828182845}, true},
-		{"IntSlice", []int{}, true},
-		{"Int8Slice", []int8{}, true},
-		{"Int16Slice", []int16{}, true},
-		{"Int32Slice", []int32{}, true},
-		{"Int64Slice", []int64{}, true},
-		{"DurationSlice", []time.Duration{}, true},
-		{"UintSlice", []uint{}, true},
-		{"Uint8Slice", []uint8{}, true},
-		{"Uint16Slice", []uint16{}, true},
-		{"Uint32Slice", []uint32{}, true},
-		{"Uint64Slice", []uint64{}, true},
-		{"URLSlice", []url.URL{*url1, *url2}, true},
-		{"RegexpSlice", []regexp.Regexp{*re1, *re2}, true},
-		{"Unsupported", time.Now(), false},
+		{"URL", *u, true},
+		{"Regexp", *r, true},
+		{"Duration", time.Second, true},
+		{"StringPointer", ptr.String("content"), true},
+		{"BoolPointer", ptr.Bool(true), true},
+		{"Float32Pointer", ptr.Float32(3.1415), true},
+		{"Float64Pointer", ptr.Float64(3.14159265359), true},
+		{"IntPointer", ptr.Int(-9223372036854775808), true},
+		{"Int8Pointer", ptr.Int8(-128), true},
+		{"Int16Pointer", ptr.Int16(-32768), true},
+		{"Int32Pointer", ptr.Int32(-2147483648), true},
+		{"Int64Pointer", ptr.Int64(-9223372036854775808), true},
+		{"UintPointer", ptr.Uint(18446744073709551615), true},
+		{"Uint8Pointer", ptr.Uint8(255), true},
+		{"Uint16Pointer", ptr.Uint16(65535), true},
+		{"Uint32Pointer", ptr.Uint32(4294967295), true},
+		{"Uint64Pointer", ptr.Uint64(18446744073709551615), true},
+		{"URLPointer", u, true},
+		{"RegexpPointer", r, true},
+		{"DurationPointer", ptr.Duration(time.Second), true},
+		{"StringSlice", []string{"content"}, true},
+		{"BoolSlice", []bool{true}, true},
+		{"Float32Slice", []float32{3.1415}, true},
+		{"Float64Slice", []float64{3.14159265359}, true},
+		{"IntSlice", []int{-9223372036854775808}, true},
+		{"Int8Slice", []int8{-128}, true},
+		{"Int16Slice", []int16{-32768}, true},
+		{"Int32Slice", []int32{-2147483648}, true},
+		{"Int64Slice", []int64{-9223372036854775808}, true},
+		{"UintSlice", []uint{18446744073709551615}, true},
+		{"Uint8Slice", []uint8{255}, true},
+		{"Uint16Slice", []uint16{65535}, true},
+		{"Uint32Slice", []uint32{4294967295}, true},
+		{"Uint64Slice", []uint64{18446744073709551615}, true},
+		{"URLSlice", []url.URL{*u}, true},
+		{"RegexpSlice", []regexp.Regexp{*r}, true},
+		{"DurationSlice", []time.Duration{time.Second}, true},
 	}
 
 	for _, tc := range tests {

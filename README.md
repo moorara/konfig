@@ -52,20 +52,6 @@ You can find examples of using `konfig` alongside some demos [here](./examples).
 
 ## Documentation
 
-Supported types:
-
-  - `bool`, `[]bool`
-  - `string`, `[]string`
-  - `float32`, `float64`
-  - `[]float32`, `[]float64`
-  - `int`, `int8`, `int16`, `int32`, `int64`
-  - `[]int`, `[]int8`, `[]int16`, `[]int32`, `[]int64`
-  - `uint`, `uint8`, `uint16`, `uint32`, `uint64`
-  - `[]uint`, `[]uint8`, `[]uint16`, `[]uint32`, `[]uint64`
-  - `time.Duration`, `[]time.Duration`
-  - `url.URL`, `[]url.URL`
-  - `regexp.Regexp`, `[]regexp.Regexp`
-
 The precedence of sources for reading values is as follows:
 
   1. command-line flags
@@ -102,6 +88,25 @@ export TIMEOUT_FILE=...
 export ADDRESS_FILE=...
 export ENDPOINTS_FILE=...
 ```
+
+### Supported Types
+
+  - `string`, `*string`, `[]string`
+  - `bool`, `*bool`, `[]bool`
+  - `float32`, `float64`
+  - `*float32`, `*float64`
+  - `[]float32`, `[]float64`
+  - `int`, `int8`, `int16`, `int32`, `int64`
+  - `*int`, `*int8`, `*int16`, `*int32`, `*int64`
+  - `[]int`, `[]int8`, `[]int16`, `[]int32`, `[]int64`
+  - `uint`, `uint8`, `uint16`, `uint32`, `uint64`
+  - `*uint`, `*uint8`, `*uint16`, `*uint32`, `*uint64`
+  - `[]uint`, `[]uint8`, `[]uint16`, `[]uint32`, `[]uint64`
+  - `url.URL`, `*url.URL`, `[]url.URL`
+  - `regexp.Regexp`, `*regexp.Regexp`, `[]regexp.Regexp`
+  - `time.Duration`, `*time.Duration`, `[]time.Duration`
+
+The supported syntax for Regexp is [POSIX Regular Expressions](https://en.wikibooks.org/wiki/Regular_Expressions/POSIX_Basic_Regular_Expressions).
 
 ### Skipping
 
