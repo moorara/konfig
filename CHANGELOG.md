@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.4.4](https://github.com/moorara/konfig/tree/v0.4.4) (2020-10-19)
+
+[Full Changelog](https://github.com/moorara/konfig/compare/v0.4.3...v0.4.4)
+
+**Closed issues:**
+
+- Add Support for Pointer Types [\#70](https://github.com/moorara/konfig/issues/70)
+
+**Merged pull requests:**
+
+- Support pointers [\#71](https://github.com/moorara/konfig/pull/71) ([moorara](https://github.com/moorara))
+
 ## [v0.4.3](https://github.com/moorara/konfig/tree/v0.4.3) (2020-10-16)
 
 [Full Changelog](https://github.com/moorara/konfig/compare/v0.4.2...v0.4.3)
