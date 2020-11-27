@@ -218,7 +218,7 @@ for **dynamic configuration management** and **secret injection** for Go applica
 
 
 [godoc-url]: https://pkg.go.dev/github.com/moorara/konfig
-[godoc-image]: https://godoc.org/github.com/moorara/konfig?status.svg
+[godoc-image]: https://pkg.go.dev/badge/github.com/moorara/konfig
 [workflow-url]: https://github.com/moorara/konfig/actions
 [workflow-image]: https://github.com/moorara/konfig/workflows/Main/badge.svg
 [goreport-url]: https://goreportcard.com/report/github.com/moorara/konfig
