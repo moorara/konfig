@@ -1,10 +1,15 @@
+# ARCHIVED
+
+Moved to https://github.com/moorara/acai/tree/main/konfig
+
+
+# konfig
+
 [![Go Doc][godoc-image]][godoc-url]
 [![Build Status][workflow-image]][workflow-url]
 [![Go Report Card][goreport-image]][goreport-url]
 [![Test Coverage][coverage-image]][coverage-url]
 [![Maintainability][maintainability-image]][maintainability-url]
-
-# konfig
 
 This is a very minimal and unopinionated utility for reading configuration values
 in Go applications based on [The 12-Factor App](https://12factor.net/config).
